@@ -10,6 +10,7 @@
   },
   "private": true,
   "dependencies": {
+    "@angular/cdk": "^19.2.10",
     "@angular/common": "^19.2.0",
     "@angular/compiler": "^19.2.0",
     "@angular/core": "^19.2.0",
@@ -17,6 +18,13 @@
     "@angular/platform-browser": "^19.2.0",
     "@angular/platform-browser-dynamic": "^19.2.0",
     "@angular/router": "^19.2.0",
+    "@apollo/client": "^3.13.8",
+    "@swimlane/ngx-charts": "^22.0.0-alpha.1",
+    "apollo-angular": "^10.0.3",
+    "d3": "^7.9.0",
+    "graphql": "^16.10.0",
+    "install": "^0.13.0",
+    "npm": "^10.9.2",
     "rxjs": "~7.8.0",
     "tslib": "^2.3.0",
     "zone.js": "~0.15.0"
@@ -32,6 +40,6 @@
     "karma-coverage": "~2.2.0",
     "karma-jasmine": "~5.1.0",
     "karma-jasmine-html-reporter": "~2.1.0",
-    "typescript": "~5.7.2"
+    "typescript": "^5.8.3"
   }
 }
