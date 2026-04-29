@@ -4,6 +4,7 @@ import { PokemonGraphqlService } from './services/pokemon.service';
 import { map } from 'rxjs';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
+import { HasuraService } from './services/hasura.service';
 
 interface HeatmapSeries {
   name: string;
@@ -11,7 +12,13 @@ interface HeatmapSeries {
 }
 interface HeatmapData {
   name: string;
+  image?: string;
   series: HeatmapSeries[];
+}
+
+interface User {
+  id: string;
+  name: string;
 }
 
 @Component({
@@ -35,11 +42,14 @@ export class AppComponent implements OnInit, AfterViewInit {
   pieChartData: { name: string; value: number }[] = [];
 
   selectedPokemons: string[] = [];
-  selectedPokemon = '';
+  selectedPokemon: any = '';
   selectedDateRange: [string, string] = ['17/04/2025', '30/04/2025'];
   startDate = '2025-04-17';
   endDate = '2025-04-30';
   minDamage = 0;
+
+  users: User[] = [];
+  newUserName: string = '';
 
   readonly DATES = [
     '17/04/2025', '22/04/2025', '23/04/2025',
@@ -59,7 +69,10 @@ export class AppComponent implements OnInit, AfterViewInit {
     domain: [...this.customColorScheme.domain].reverse()
   };
 
-  constructor(private readonly pokemonService: PokemonGraphqlService) {}
+  constructor(
+    private readonly pokemonService: PokemonGraphqlService,
+    private readonly hasuraService: HasuraService,
+  ) { }
 
   ngOnInit(): void {
     this.pokemonService.getPokemons()
@@ -67,6 +80,7 @@ export class AppComponent implements OnInit, AfterViewInit {
       .subscribe(data => this.data = data);
 
     this.pokemonService.getPokemonsWithAttacks().subscribe(pokemons => {
+      console.log('Pokemons with attacks:', pokemons);
       this.heatmapData = pokemons.map(this.buildHeatmapEntry.bind(this));
       this.originalHeatmapData = [...this.heatmapData];
       this.filteredHeatmapData = [...this.heatmapData];
@@ -79,6 +93,18 @@ export class AppComponent implements OnInit, AfterViewInit {
     this.view = [width, 400];
   }
 
+  createUser(): void {
+    if (this.newUserName) {
+      this.hasuraService.createUser(this.newUserName).subscribe({
+        next: (response) => {
+          console.log('User created:', response);
+          this.newUserName = '';
+        },
+        error: (error) => console.error('Error creating user:', error),
+      });
+    }
+  }
+
   private buildHeatmapEntry(pokemon: any): HeatmapData {
     const attacks = [...(pokemon.attacks?.fast ?? []), ...(pokemon.attacks?.special ?? [])];
     const totalDamage = attacks.reduce((sum, atk) => sum + (atk.damage ?? 0), 0);
@@ -86,7 +112,7 @@ export class AppComponent implements OnInit, AfterViewInit {
       ? this.distributeDamageAcrossDates(totalDamage, this.DATES)
       : this.DATES.map(date => ({ name: date, value: 0 }));
 
-    return { name: pokemon.name, series };
+    return {  name: pokemon.name, image: pokemon.image, series };
   }
 
   private buildPieChartData(pokemons: any[]): { name: string; value: number }[] {
@@ -111,7 +137,7 @@ export class AppComponent implements OnInit, AfterViewInit {
     }, new Map());
 
     return Array.from(weightMap.entries())
-      .map(([type, { name, weight }]) => ({ name: `${type} (${name})`, value: weight }))
+    .map(([type, { name, weight }]) => ({ name: `${type} (${name})`, value: weight, image: pokemons.find(p => p.name === name)?.image }))
       .sort((a, b) => b.value - a.value);
   }
 
@@ -147,11 +173,14 @@ export class AppComponent implements OnInit, AfterViewInit {
       .filter(p => !selectedNames.length || selectedNames.includes(p.name))
       .map(p => ({
         name: p.name,
+        image: p.image,
         series: p.series.filter(s => {
           const date = this.toDate(s.name);
           return date >= start && date <= end && s.value >= this.minDamage;
         })
       }));
+
+      console.log(this.selectedPokemon, 'selectedPokemon', this.filteredHeatmapData);
   }
 
   resetFilters(): void {

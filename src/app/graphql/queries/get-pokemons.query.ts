@@ -4,6 +4,7 @@ export const GET_POKEMONS_QUERY = `
     id
     name
     types
+    image
     weight {
       minimum
        maximum

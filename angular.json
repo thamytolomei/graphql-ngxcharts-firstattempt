@@ -28,7 +28,23 @@
             "assets": [
               {
                 "glob": "**/*",
-                "input": "public"
+                "input": "public/images",
+                "output": "assets/images"
+              },
+              {
+                "glob": "**/*",
+                "input": "public/fonts",
+                "output": "assets/fonts"
+              },
+              {
+                "glob": "**/*",
+                "input": "public/favicon",
+                "output": "assets/favicon"
+              },
+              {
+                "glob": "**/*",
+                "input": "public/manifest",
+                "output": "assets/manifest"
               }
             ],
             "styles": [
@@ -87,7 +103,8 @@
             "assets": [
               {
                 "glob": "**/*",
-                "input": "public"
+                "input": "public/images",
+                "output": "assets/images"
               }
             ],
             "styles": [

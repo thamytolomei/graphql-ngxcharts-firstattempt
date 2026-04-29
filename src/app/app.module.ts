@@ -5,7 +5,6 @@ import { AppRoutingModule } from './app-routing.module';
 import { BrowserAnimationsModule, provideAnimations } from '@angular/platform-browser/animations';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { GraphQLModule } from './graphql/graphql.module';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 
 @NgModule({
@@ -16,8 +15,6 @@ import { provideAnimationsAsync } from '@angular/platform-browser/animations/asy
     AppRoutingModule,
     BrowserAnimationsModule,
     CommonModule,
-    FormsModule,
-    GraphQLModule,
     FormsModule,
   ],
   schemas: [CUSTOM_ELEMENTS_SCHEMA], // Adicione esta linha

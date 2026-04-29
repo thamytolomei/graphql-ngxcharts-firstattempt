@@ -1,9 +1,24 @@
+<div class="header">
+  <div class="left-column">
+    <img src="/assets/images/pokemon.png" alt="">
+    <h1>ChartsQL</h1>
+    <span>
+      Bem-vindo ao nosso site! Aqui, dados ganham vida de forma divertida e interativa. Combinamos a precisão dos gráficos Swimlane, o poder do GraphQL e o universo cativante dos Pokémon para oferecer uma experiência única. Explore como informações podem ser visualizadas de forma clara e envolvente — e sim, com alguns Pikachus no caminho!
+    </span>
+  </div>
+  <div class="right-column">
+    <img src="/assets/images/pokemon-53.png" alt="">
+  </div>
+</div>
 <div class="charts-container">
-  <div class="chart">
-    <h2>Pokemons Mais Pesados Por Tipo</h2>
-    <ngx-charts-bar-horizontal [view]="view" [results]="data" [gradient]="true" [scheme]="customColorScheme" [xAxis]="true"
-      [yAxis]="true" [legend]="true" [showXAxisLabel]="true" [showYAxisLabel]="true" [xAxisTickFormatting]="formatValue"
-      [tooltipDisabled]="false" (tooltipActivate)="onTooltipActivate($event)"
+  <div class="chart bars">
+    <div class="title">
+      <img src="/assets/images/pika3.gif" alt="">
+      <h2>Pokemons Mais Pesados Por Tipo</h2>
+    </div>
+    <ngx-charts-bar-horizontal [view]="view" [results]="data" [gradient]="true" [scheme]="customColorScheme"
+      [xAxis]="true" [yAxis]="true" [legend]="true" [showXAxisLabel]="true" [showYAxisLabel]="true"
+      [xAxisTickFormatting]="formatValue" [tooltipDisabled]="false" (tooltipActivate)="onTooltipActivate($event)"
       (tooltipDeactivate)="onTooltipDeactivate($event)" [xAxisLabel]="'Peso em KG'"
       [yAxisLabel]="'Tipo (Pokémon mais pesado)'">
       <ng-template #tooltipTemplate let-model="model" style="height: 2rem !important;">
@@ -11,43 +26,60 @@
       </ng-template>
     </ngx-charts-bar-horizontal>
   </div>
-  <div class="chart">
-    <h2>Pokemons Com Mais Ataques</h2>
-    <ngx-charts-pie-chart  [view]="view"  [results]="pieChartData" [scheme]="customColorScheme" [legend]="true" [explodeSlices]="false"
-      [labels]="true" [doughnut]="false">
-    </ngx-charts-pie-chart>
-  </div>
-  <div class="chart">
-    <h2>Distribuição de Dano dos Ataques por Pokémon e Data</h2>
-    <div class="row">
-       <div class="column">
-         <label for="pokemonSelect">Selecionar Pokémon:</label>
-         <select id="pokemonSelect" [(ngModel)]="selectedPokemon" (change)="applyFilters()">
-            <option value="" disabled selected>Selecione uma opção</option>
-           <option *ngFor="let item of heatmapData" [value]="item.name">{{ item.name }}</option>
-         </select>
-       </div>
-       <div class="column">
-         <label for="startDate">Data de início:</label>
-         <input type="date" id="startDate" [(ngModel)]="startDate" (change)="applyFilters()">
-       </div>
-       <div class="column">
-         <label for="endDate">Data de fim:</label>
-         <input type="date" id="endDate" [(ngModel)]="endDate" (change)="applyFilters()">
-       </div>>
-       <div class="column">
-         <label for="damageRange">Dano mínimo:</label>
-         <input type="range" id="damageRange" min="0" max="200" step="1" [(ngModel)]="minDamage"
-           (input)="applyFilters()" />
-         <span>{{ minDamage }}</span>
-       </div>
+  <div class="chart heatmap">
+    <div class="title">
+      <img src="/assets/images/poko02.gif" alt="">
+      <h2>Distribuição de Dano dos Ataques por Pokémon e Data</h2>
+    </div>
+    <div class="row filters">
+      <div class="column">
+        <label for="pokemonSelect">Selecionar Pokémon:</label>
+        <select id="pokemonSelect" [(ngModel)]="selectedPokemon" (change)="applyFilters()">
+          <option value="" disabled selected>Selecione uma opção</option>
+          <option *ngFor="let item of heatmapData" [value]="item.name">{{ item.name }}</option>
+        </select>
+      </div>
+      <div class="column">
+        <label for="startDate">Data de início:</label>
+        <input type="date" id="startDate" [(ngModel)]="startDate" (change)="applyFilters()">
+      </div>
+      <div class="column">
+        <label for="endDate">Data de fim:</label>
+        <input type="date" id="endDate" [(ngModel)]="endDate" (change)="applyFilters()">
+      </div>
+      <div class="column">
+        <label for="damageRange">Dano mínimo:</label>
+        <div class="row" style="margin-top: 0px !important; width: 100% !important;">
+          <input type="range" id="damageRange" min="0" max="200" step="1" [(ngModel)]="minDamage"
+            (input)="applyFilters()" />
+          <span>{{ minDamage }}</span>
+        </div>
+      </div>
       <button (click)="resetFilters()">Limpar filtros</button>
     </div>
     <div class="chart-container" #chartContainer>
-      <ngx-charts-heat-map  [view]="view" [results]="filteredHeatmapData" [scheme]="customHeatScheme" [xAxis]="true" [yAxis]="true"
-        [legend]="true" [animations]="true" [showXAxisLabel]="true" [showYAxisLabel]="true"
+      <div class="poke-row">
+        <div class="poke-image neon-border" *ngIf="selectedPokemon">
+          <img src="{{ filteredHeatmapData[0].image }}" alt="">
+        </div>
+        <span>{{ selectedPokemon }}</span>
+      </div>
+      <div class="pika-wrapper">
+        <img src="/assets/images/pika03.gif" alt="">
+      </div>
+      <ngx-charts-heat-map [view]="view" [results]="filteredHeatmapData" [scheme]="customHeatScheme" [xAxis]="true"
+        [yAxis]="true" [legend]="true" [animations]="true" [showXAxisLabel]="true" [showYAxisLabel]="true"
         [yAxisLabel]="'Data do Ataque'" [xAxisLabel]="'Nome do Pokemon'">
       </ngx-charts-heat-map>
     </div>
+  </div>
+  <div class="chart pie">
+    <div class="title">
+      <img src="/assets/images/poko01.gif" alt="">
+      <h2>Pokemons Com Mais Ataques</h2>
+    </div>
+    <ngx-charts-pie-chart [view]="view" [results]="pieChartData" [scheme]="customColorScheme" [legend]="true"
+      [explodeSlices]="false" [labels]="true" [doughnut]="false">
+    </ngx-charts-pie-chart>
   </div>
 </div>

@@ -1,12 +1,13 @@
 *{
+  overflow-x: hidden;
+}
+
+html{
   font-family: 'Calibri' !important;
-  color: white !important;
+  background-color: #D8D8D8;
 }
 
 body{
   padding: 0 !important;
   margin: 0 !important;
 }
-
-html, body { height: 100%; }
-body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }

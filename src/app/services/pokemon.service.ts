@@ -1,7 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Apollo } from 'apollo-angular';
-import gql from 'graphql-tag';
-import { Observable } from 'rxjs';
+import { Apollo, gql } from 'apollo-angular';
 import { map } from 'rxjs/operators';
 import { GET_POKEMONS_QUERY } from '../graphql/queries/get-pokemons.query';
 import { GET_POKEMONS_WITH_ATTACKS_QUERY } from '../graphql/queries/get-pokemons-with-attachs.query';
@@ -10,7 +8,7 @@ import { GET_POKEMONS_WITH_ATTACKS_QUERY } from '../graphql/queries/get-pokemons
   providedIn: 'root',
 })
 export class PokemonGraphqlService {
-  constructor(private apollo: Apollo) {}
+  constructor(private readonly apollo: Apollo) {}
 
   getPokemons() {
     return this.apollo.query({
@@ -18,6 +16,7 @@ export class PokemonGraphqlService {
     }).pipe(
       map((result: any) => result.data['pokemons'])
     );
+
   }
 
   getPokemonsWithAttacks() {
